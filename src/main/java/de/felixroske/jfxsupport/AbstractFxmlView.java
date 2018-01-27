@@ -431,4 +431,5 @@ public abstract class AbstractFxmlView implements ApplicationContextAware {
 				+ resource + ", fxmlRoot=" + fxmlRoot + "]";
 	}
 
+	public abstract void init();
 }

@@ -77,6 +77,7 @@ public abstract class AbstractJavaFxApplicationSupport extends Application {
             newScene = view.getView().getScene();
         } else {
             newScene = new Scene(view.getView());
+            view.init();
         }
 
         newStage.setScene(newScene);
@@ -222,7 +223,7 @@ public abstract class AbstractJavaFxApplicationSupport extends Application {
 
             GUIState.getStage().getIcons().addAll(icons);
             GUIState.getStage().show();
-
+            view.init();
         } catch (Throwable t) {
             LOGGER.error("Failed to load application: ", t);
             showErrorAlert(t);

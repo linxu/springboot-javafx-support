@@ -7,5 +7,8 @@ import de.felixroske.jfxsupport.FXMLView;
           bundle="annotated.i18n.annotated",
           css="/annotated/css/style.css")
 public class AnnotatedView extends AbstractFxmlView {
+    @Override
+    public void init() {
 
+    }
 }
