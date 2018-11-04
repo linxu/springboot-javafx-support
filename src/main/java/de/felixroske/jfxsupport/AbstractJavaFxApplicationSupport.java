@@ -78,7 +78,29 @@ public abstract class AbstractJavaFxApplicationSupport extends Application {
         } else {
             newScene = new Scene(view.getView());
         }
+        view.initController(null);
+        newStage.setScene(newScene);
+        newStage.initModality(mode);
+        newStage.initOwner(getStage());
+        newStage.setTitle(view.getDefaultTitle());
+        newStage.initStyle(view.getDefaultStyle());
 
+        newStage.showAndWait();
+    }
+
+    public static void showView(final Class<? extends AbstractFxmlView> window, final Modality mode, Object params) {
+        final AbstractFxmlView view = applicationContext.getBean(window);
+        Stage newStage = new Stage();
+
+        Scene newScene;
+        if (view.getView().getScene() != null) {
+            // This view was already shown so
+            // we have a scene for it and use this one.
+            newScene = view.getView().getScene();
+        } else {
+            newScene = new Scene(view.getView());
+        }
+        view.initController(params);
         newStage.setScene(newScene);
         newStage.initModality(mode);
         newStage.initOwner(getStage());
@@ -146,14 +168,14 @@ public abstract class AbstractJavaFxApplicationSupport extends Application {
         GUIState.setHostServices(this.getHostServices());
         final Stage splashStage = new Stage(StageStyle.TRANSPARENT);
 
-		if (AbstractJavaFxApplicationSupport.splashScreen.visible()) {
-			final Scene splashScene = new Scene(splashScreen.getParent(), Color.TRANSPARENT);
-			splashStage.setScene(splashScene);
+        if (AbstractJavaFxApplicationSupport.splashScreen.visible()) {
+            final Scene splashScene = new Scene(splashScreen.getParent(), Color.TRANSPARENT);
+            splashStage.setScene(splashScene);
             splashStage.getIcons().addAll(defaultIcons);
             splashStage.initStyle(StageStyle.TRANSPARENT);
             beforeShowingSplash(splashStage);
             splashStage.show();
-		}
+        }
 
         final Runnable showMainAndCloseSplash = () -> {
             showInitialView();
@@ -293,16 +315,18 @@ public abstract class AbstractJavaFxApplicationSupport extends Application {
 
         launch(appClass, view, new SplashScreen(), args);
     }
+
     /**
      * Launch app.
-     * @deprecated To be more in line with javafx.application please use launch
+     *
      * @param appClass the app class
      * @param view     the view
      * @param args     the args
+     * @deprecated To be more in line with javafx.application please use launch
      */
     @Deprecated
     public static void launchApp(final Class<? extends Application> appClass,
-                              final Class<? extends AbstractFxmlView> view, final String[] args) {
+                                 final Class<? extends AbstractFxmlView> view, final String[] args) {
 
         launch(appClass, view, new SplashScreen(), args);
     }
@@ -332,21 +356,22 @@ public abstract class AbstractJavaFxApplicationSupport extends Application {
 
         Application.launch(appClass, args);
     }
+
     /**
      * Launch app.
      *
-     * @deprecated To be more in line with javafx.application please use launch
      * @param appClass     the app class
      * @param view         the view
      * @param splashScreen the splash screen
      * @param args         the args
+     * @deprecated To be more in line with javafx.application please use launch
      */
     @Deprecated
     public static void launchApp(final Class<? extends Application> appClass,
-                              final Class<? extends AbstractFxmlView> view, final SplashScreen splashScreen, final String[] args) {
+                                 final Class<? extends AbstractFxmlView> view, final SplashScreen splashScreen, final String[] args) {
         launch(appClass, view, splashScreen, args);
     }
-    
+
     /**
      * Gets called after full initialization of Spring application context
      * and JavaFX platform right before the initial view is shown.
