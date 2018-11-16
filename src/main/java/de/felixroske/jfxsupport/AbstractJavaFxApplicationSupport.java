@@ -5,6 +5,7 @@ import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -60,6 +61,21 @@ public abstract class AbstractJavaFxApplicationSupport extends Application {
 
     public static SystemTray getSystemTray() {
         return GUIState.getSystemTray();
+    }
+
+
+    public static Parent getView(final Class<? extends AbstractFxmlView> window) {
+        final AbstractFxmlView view = applicationContext.getBean(window);
+        Parent parent = view.getView();
+        view.initController(null);
+        return parent;
+    }
+
+    public static Parent getView(final Class<? extends AbstractFxmlView> window, Object params) {
+        final AbstractFxmlView view = applicationContext.getBean(window);
+        Parent parent = view.getView();
+        view.initController(params);
+        return parent;
     }
 
     /**
